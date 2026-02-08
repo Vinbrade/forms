@@ -1,0 +1,21 @@
+# Environment variables
+.env
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+database/*.db
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Frontend specific
+frontend/dist/
+frontend/build/
+frontend/.vite/
+
+# Backend specific
+backend/node_modules/
