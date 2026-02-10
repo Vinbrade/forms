@@ -13,7 +13,7 @@ import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { placeFormData } from "@/data/place"
+import { createForm, ApiError } from "@/helpers/api"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
@@ -25,33 +25,35 @@ export function CreateForm({ activeTab, isPublished, isDrafted, text }: { active
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
-    const onSubmit = (e: React.FormEvent) => {
-
+    const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        if (!formTitle.trim()) {
-          toast.error("Please provide a form title", { position: "bottom-center" });
-          return;
+
+        const title = formTitle.trim();
+        const description = formDescription.trim() || null;
+
+        if (!title) {
+            toast.error("Please provide a form title", { position: "bottom-center" });
+            return;
         }
-    
+
+        setLoading(true);
         try {
-          setLoading(true);
-        //   const form = await createForm({
-        //     name: formTitle.trim(),
-        //     description: formDescription.trim() || null,
-        //   });
-
-
-          const formId = placeFormData.length + 1;
-          toast.success("Form created successfully!", { position: "bottom-center" });
-          navigate(`/edit-form/${formId}`);
+            const form = await createForm({
+                name: title,
+                description: description ?? null,
+                status: "draft",
+            });
+            toast.success("Form created successfully!", { position: "bottom-center" });
+            setFormTitle("");
+            setFormDescription("");
+            navigate(`/edit-form/${form.form_id}`);
         } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : "Failed to create form";
-          toast.error(errorMessage, { position: "bottom-center" });
+            const errorMessage = error instanceof ApiError ? error.message : "Failed to create form";
+            toast.error(errorMessage, { position: "bottom-center" });
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
+    };
 
 
   return (

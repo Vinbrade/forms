@@ -6,11 +6,11 @@ export function FormCard({ title, responses, fields, published, status, created 
     return (
         <Card className='pt-0 h-60 relative cursor-pointer  border-2 hover:border-2 hover:border-primary'>
             <Badge variant="default" className={`absolute top-2 right-2 ${
-                    status === 'active' ? 'bg-green-600' :
-                    status === 'draft' ? 'bg-yellow-600' :
+                    status === 'published' ? 'bg-green-600' :
+                    status === 'draft' ? 'hidden' :
                         'bg-primary'}`}>{status}</Badge>
             <CardHeader className={`flex h-30 border-b border-border ${
-                status === 'active' ? 'bg-green-100 dark:bg-green-950' : 
+                status === 'published' ? 'bg-green-100 dark:bg-green-950' : 
                 status === 'draft' ? 'bg-yellow-100 dark:bg-yellow-950' : 
                 'bg-primary-foreground dark:bg-gray-800'}  items-end`}>
                 <CardTitle className='text-wrap font-bold'>{title}</CardTitle>
